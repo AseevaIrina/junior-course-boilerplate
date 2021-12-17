@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import data from './products.json';
-import {minBy, maxBy} from 'csssr-school-utils';
+import { minBy, maxBy } from 'csssr-school-utils';
 
 import MainTitle from './components/MainTitle/MainTitle';
 import CardsList from './components/CardsList/CardsList';
@@ -27,7 +27,7 @@ class App extends React.Component {
     };
   }
 
-  handleChangeState = (name,filteredValue) => {
+  handleChangeState = ( name, filteredValue ) => {
     this.setState({[name]: filteredValue});
   }
 
@@ -36,8 +36,12 @@ class App extends React.Component {
     this.setState({category: value});
   }
 
+  categoryActiveClass = (name) => {
+    return name === this.state.category ? 'is-active' : ''
+  }
+
   filterProducts = memoize(( data, minPrice, maxPrice, discount, category ) => {
-    return data.filter((item) => {
+    return data.filter( (item) => {
       if (category !== '') {
         return item.price >= minPrice && item.price <= maxPrice && item.discount >= discount && item.category === category
       }
@@ -50,27 +54,30 @@ class App extends React.Component {
   render() {
     return (
       <BaseContext.Provider value={
-        { ...this.state, categoryChangeState:this.categoryChangeState }
+        { ...this.state, categoryChangeState:this.categoryChangeState,
+          inputMinValue: this.state.minPrice,
+          inputMaxValue: this.state.maxPrice,
+          handleChangeState: this.handleChangeState,
+          listProducts: this.filterProducts(this.state.filteredProducts,
+            this.state.minPrice, this.state.maxPrice, this.state.discount, this.state.category),
+          categoryActiveClass: this.categoryActiveClass
+        }
       }>
         <div className="main">
           <section className="aside-section">
+            <PriceBlock />
 
-            <PriceBlock
-              inputMinValue={this.state.minPrice}
-              inputMaxValue={this.state.maxPrice}
-              handleChangeState={this.handleChangeState}
-            />
             <div className="aside-block discount-block">
-              <InputDiscount title='Скидка' name='discount' value={this.state.discount} onChange={this.handleChangeState}  />
+              <InputDiscount title='Скидка' name='discount' value={this.state.discount} />
             </div>
+
             <Categories/>
           </section>
 
           <section className="main-section">
             <MainTitle title="Список товаров" />
-            <CardsList listProducts={this.filterProducts(this.state.filteredProducts,
-              this.state.minPrice, this.state.maxPrice, this.state.discount, this.state.category)}
-            />
+
+            <CardsList />
           </section>
         </div>
       </BaseContext.Provider>
