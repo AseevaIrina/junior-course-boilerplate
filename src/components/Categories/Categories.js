@@ -12,7 +12,7 @@ class Categories extends React.Component {
   render() {
     return (
       <BaseContext.Consumer>
-        {(categoryChangeState) => (
+        {( categoryChangeState ) => (
           <div className="aside-block categories-block">
             <h3 className="aside-block__title">Категории</h3>
             <div className="aside-block__row">

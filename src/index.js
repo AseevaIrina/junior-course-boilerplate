@@ -36,7 +36,7 @@ class App extends React.Component {
     this.setState({category: value});
   }
 
-  filterProducts = memoize((data, minPrice, maxPrice, discount, category) => {
+  filterProducts = memoize(( data, minPrice, maxPrice, discount, category ) => {
     return data.filter((item) => {
       if (category !== '') {
         return item.price >= minPrice && item.price <= maxPrice && item.discount >= discount && item.category === category
@@ -50,9 +50,7 @@ class App extends React.Component {
   render() {
     return (
       <BaseContext.Provider value={
-        {...this.state,
-          categoryChangeState:this.categoryChangeState
-        }
+        { ...this.state, categoryChangeState:this.categoryChangeState }
       }>
         <div className="main">
           <section className="aside-section">
