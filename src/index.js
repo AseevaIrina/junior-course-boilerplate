@@ -18,12 +18,13 @@ import { BaseContext } from './components/BaseContext/BaseContext';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    const url = window.location.pathname.substr(1);
     this.state = {
       minPrice: minBy(obj => obj.price, data).price,
       maxPrice: maxBy(obj => obj.price, data).price,
       discount: minBy(obj => obj.discount, data).discount,
       filteredProducts: data,
-      category: 'books'
+      category: url,
     };
   }
 
@@ -33,11 +34,14 @@ class App extends React.Component {
 
   categoryChangeState = (event) => {
     const { value } = event.target
-    this.setState({category: value});
-  }
-
-  categoryActiveClass = (name) => {
-    return name === this.state.category ? 'is-active' : ''
+    const url = window.location.href
+    if ( value !== '' ) {
+      window.history.pushState({ url }, 'category', '?category=' + value )
+    }
+    else {
+      window.history.pushState({ url }, 'category', '?categories' )
+    }
+    this.setState({category: value})
   }
 
   filterProducts = memoize(( data, minPrice, maxPrice, discount, category ) => {
@@ -57,10 +61,11 @@ class App extends React.Component {
         { ...this.state, categoryChangeState:this.categoryChangeState,
           inputMinValue: this.state.minPrice,
           inputMaxValue: this.state.maxPrice,
+          discount: this.state.discount,
           handleChangeState: this.handleChangeState,
           listProducts: this.filterProducts(this.state.filteredProducts,
             this.state.minPrice, this.state.maxPrice, this.state.discount, this.state.category),
-          categoryActiveClass: this.categoryActiveClass
+          activeCategoryBtn: this.state.category
         }
       }>
         <div className="main">
@@ -68,7 +73,7 @@ class App extends React.Component {
             <PriceBlock />
 
             <div className="aside-block discount-block">
-              <InputDiscount title='Скидка' name='discount' value={this.state.discount} />
+              <InputDiscount onChange={this.handleChangeState}/>
             </div>
 
             <Categories/>
