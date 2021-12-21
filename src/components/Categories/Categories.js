@@ -16,8 +16,7 @@ class Categories extends React.Component {
             </div>
             <button className="categories-block__btn" onClick={categoryChangeState} value=''>Сбросить фильтры</button>
           </div>
-        )
-        }
+        )}
       </BaseContext.Consumer>
     )
   }

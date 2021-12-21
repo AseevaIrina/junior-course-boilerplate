@@ -18,14 +18,31 @@ import { BaseContext } from './components/BaseContext/BaseContext';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const url = window.location.pathname.substr(1);
+    const url = window.location.search
+    const urlToState = url.split('=').pop()
+
     this.state = {
       minPrice: minBy(obj => obj.price, data).price,
       maxPrice: maxBy(obj => obj.price, data).price,
       discount: minBy(obj => obj.discount, data).discount,
       filteredProducts: data,
-      category: url,
+      category: urlToState
     };
+
+    window.history.replaceState({ url: this.state.category }, 'category', '?category=' + this.state.category);
+  }
+
+  componentDidMount() {
+    window.addEventListener('popstate', this.setFromHistory);
+  }
+
+  setFromHistory = event => {
+    const url = event.state['url']
+    this.setState({ category: url });
+  };
+
+  componentWillUnmount() {
+    window.removeEventListener('popstate', this.setFromHistory);
   }
 
   handleChangeState = ( name, filteredValue ) => {
@@ -33,15 +50,10 @@ class App extends React.Component {
   }
 
   categoryChangeState = (event) => {
-    const { value } = event.target
-    const url = window.location.href
-    if ( value !== '' ) {
-      window.history.pushState({ url }, 'category', '?category=' + value )
-    }
-    else {
-      window.history.pushState({ url }, 'category', '?categories' )
-    }
+    let { value } = event.target
+    value = value !== this.state.category ? value : '';
     this.setState({category: value})
+    window.history.pushState({ url: value }, 'category', '?category=' + value )
   }
 
   filterProducts = memoize(( data, minPrice, maxPrice, discount, category ) => {
