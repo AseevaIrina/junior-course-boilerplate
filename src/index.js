@@ -34,7 +34,7 @@ class App extends React.Component {
   getSelectedCategoryFromUrl = (url) => {
     let parseUrl = url.split('=')
     parseUrl = parseUrl.pop()
-    return url ? parseUrl.split(',') : []
+    return parseUrl ? parseUrl.split(',') : []
   };
 
   componentDidMount() {
@@ -60,9 +60,6 @@ class App extends React.Component {
     let selected = []
     if (selectedCategories.includes( value )) {
       selected = selectedCategories.filter(( item ) => item !== value)
-    } else if ( value === '' ) {
-      this.setState({selectedCategories: ''})
-      window.history.pushState({ url: selected }, 'category', '?category=' )
     }
     else {
       selected = [...selectedCategories, value]
@@ -71,10 +68,15 @@ class App extends React.Component {
     window.history.pushState({ url: selected }, 'category', '?category=' + selected )
   }
 
+  handleResetFilters = () => {
+    this.setState({selectedCategories: []})
+    window.history.pushState( { url: this.state.selectedCategories }, 'category', '?category=' )
+  }
+
   filterProducts = memoize(( data, minPrice, maxPrice, discount, selectedCategories ) => {
     return data.filter( (item) => {
-      if (selectedCategories !== '') {
-        return item.price >= minPrice && item.price <= maxPrice && item.discount >= discount && (selectedCategories.length > 0 ? selectedCategories.includes(item.category) : true)
+      if (selectedCategories.length > 0) {
+        return item.price >= minPrice && item.price <= maxPrice && item.discount >= discount && selectedCategories.includes(item.category)
       }
       else {
         return item.price >= minPrice && item.price <= maxPrice && item.discount >= discount
@@ -92,7 +94,8 @@ class App extends React.Component {
           handleChangeState: this.handleChangeState,
           listProducts: this.filterProducts(this.state.filteredProducts,
             this.state.minPrice, this.state.maxPrice, this.state.discount, this.state.selectedCategories),
-          selectedCategories: this.state.selectedCategories
+          selectedCategories: this.state.selectedCategories,
+          handleResetFilters: this.handleResetFilters
         }
       }>
         <div className="main">

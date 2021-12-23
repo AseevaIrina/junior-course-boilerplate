@@ -7,14 +7,14 @@ class Categories extends React.Component {
   render() {
     return (
       <BaseContext.Consumer>
-        { ({ categoryChangeState }) => (
+        { ({ handleResetFilters }) => (
           <div className="aside-block categories-block">
             <h3 className="aside-block__title">Категории</h3>
             <div className="aside-block__row">
               <InputCategories value="Clothes" />
               <InputCategories value="Books" />
             </div>
-            <button className="categories-block__btn" onClick={categoryChangeState} value=''>Сбросить фильтры</button>
+            <button className="categories-block__btn" onClick={handleResetFilters}>Сбросить фильтры</button>
           </div>
         )}
       </BaseContext.Consumer>
