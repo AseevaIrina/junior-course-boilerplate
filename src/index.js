@@ -18,19 +18,24 @@ import { BaseContext } from './components/BaseContext/BaseContext';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const url = window.location.search
-    const urlToState = url.split('=').pop()
+    const urlFilterParams = decodeURIComponent(window.location.search);
 
     this.state = {
       minPrice: minBy(obj => obj.price, data).price,
       maxPrice: maxBy(obj => obj.price, data).price,
       discount: minBy(obj => obj.discount, data).discount,
       filteredProducts: data,
-      category: urlToState
+      selectedCategories: this.getSelectedCategoryFromUrl(urlFilterParams)
     };
 
-    window.history.replaceState({ url: this.state.category }, 'category', '?category=' + this.state.category);
+    window.history.replaceState({ url: this.state.selectedCategories }, 'category', '?category=' + this.state.selectedCategories);
   }
+
+  getSelectedCategoryFromUrl = (url) => {
+    let parseUrl = url.split('=')
+    parseUrl = parseUrl.pop()
+    return url ? parseUrl.split(',') : []
+  };
 
   componentDidMount() {
     window.addEventListener('popstate', this.setFromHistory);
@@ -38,7 +43,7 @@ class App extends React.Component {
 
   setFromHistory = event => {
     const url = event.state['url']
-    this.setState({ category: url });
+    this.setState({ selectedCategories: url });
   };
 
   componentWillUnmount() {
@@ -50,16 +55,26 @@ class App extends React.Component {
   }
 
   categoryChangeState = (event) => {
-    let { value } = event.target
-    value = value !== this.state.category ? value : '';
-    this.setState({category: value})
-    window.history.pushState({ url: value }, 'category', '?category=' + value )
+    const value = event.target.value
+    const selectedCategories = this.state.selectedCategories
+    let selected = []
+    if (selectedCategories.includes( value )) {
+      selected = selectedCategories.filter(( item ) => item !== value)
+    } else if ( value === '' ) {
+      this.setState({selectedCategories: ''})
+      window.history.pushState({ url: selected }, 'category', '?category=' )
+    }
+    else {
+      selected = [...selectedCategories, value]
+    }
+    this.setState({selectedCategories: selected})
+    window.history.pushState({ url: selected }, 'category', '?category=' + selected )
   }
 
-  filterProducts = memoize(( data, minPrice, maxPrice, discount, category ) => {
+  filterProducts = memoize(( data, minPrice, maxPrice, discount, selectedCategories ) => {
     return data.filter( (item) => {
-      if (category !== '') {
-        return item.price >= minPrice && item.price <= maxPrice && item.discount >= discount && item.category === category
+      if (selectedCategories !== '') {
+        return item.price >= minPrice && item.price <= maxPrice && item.discount >= discount && (selectedCategories.length > 0 ? selectedCategories.includes(item.category) : true)
       }
       else {
         return item.price >= minPrice && item.price <= maxPrice && item.discount >= discount
@@ -76,8 +91,8 @@ class App extends React.Component {
           discount: this.state.discount,
           handleChangeState: this.handleChangeState,
           listProducts: this.filterProducts(this.state.filteredProducts,
-            this.state.minPrice, this.state.maxPrice, this.state.discount, this.state.category),
-          activeCategoryBtn: this.state.category
+            this.state.minPrice, this.state.maxPrice, this.state.discount, this.state.selectedCategories),
+          selectedCategories: this.state.selectedCategories
         }
       }>
         <div className="main">
