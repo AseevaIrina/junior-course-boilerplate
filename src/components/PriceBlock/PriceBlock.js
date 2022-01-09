@@ -1,16 +1,14 @@
 import React from 'react';
 import './PriceBlock.css';
-import logRender from '../logRender/logRender';
-
+import { BaseContext } from '../BaseContext/BaseContext';
 import InputNumber from '../InputNumber/InputNumber';
 
 
 
-class PriceBlock extends logRender {
-
-  render() {
-    const { inputMinValue, inputMaxValue, handleChangeState } = this.props
-    return (
+const PriceBlock  = () => {
+  return (
+    <BaseContext.Consumer>
+      {( { inputMinValue, inputMaxValue, handleChangeState }) => (
         <form className="aside-block price-block">
           <h3 className="aside-block__title">Цена</h3>
           <div className="aside-block__row">
@@ -20,8 +18,10 @@ class PriceBlock extends logRender {
             <InputNumber defaultValue={inputMaxValue} name='maxPrice' onChange={handleChangeState} />
           </div>
         </form>
-    );
-  }
+        )
+      }
+    </BaseContext.Consumer>
+  );
 }
 
 export default PriceBlock

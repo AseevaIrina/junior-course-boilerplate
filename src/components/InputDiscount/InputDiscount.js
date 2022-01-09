@@ -1,10 +1,16 @@
 import React from 'react';
 import InputHandler from '../InputHendler/InputHandler';
+import { BaseContext } from '../BaseContext/BaseContext';
 import Discount from 'csssr-school-discount';
 
-const InputDiscount = ({name, title, value, handleChange}) => {
+const InputDiscount = ({handleChange}) => {
   return (
-    <Discount title={title} name={name} value={value} onChange={handleChange} />
+    <BaseContext.Consumer>
+      { ({ discount }) => (
+          <Discount title='Скидка' name='discount' value={discount} onChange={handleChange} />
+        )
+      }
+    </BaseContext.Consumer>
   );
 }
 
