@@ -3,6 +3,7 @@ export const CHANGE_MAX_PRICE = 'CHANGE_MAX_PRICE'
 export const CHANGE_DISCOUNT = 'CHANGE_DISCOUNT'
 export const CHANGE_CATEGORIES = 'CHANGE_CATEGORIES'
 export const RESET_FILTERS = 'RESET_FILTERS'
+export const SET_FROM_HISTORY = 'SET_FROM_HISTORY'
 
 export const changeMinPrice = (value) => {
  return {
@@ -35,5 +36,12 @@ export const changeCategories = (value) => {
 export const resetFilters = () => {
   return {
     type: RESET_FILTERS
+  }
+}
+
+export const setFromHistory = (value) => {
+  return {
+    type: SET_FROM_HISTORY,
+    payload: value
   }
 }

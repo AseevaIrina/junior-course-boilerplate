@@ -19,4 +19,6 @@ const initialState = {
   selectedCategories: getSelectedCategoryFromUrl(urlFilterParams)
 }
 
+export const ToInitialState = initialState
+
 export const store = createStore(rootReducer, initialState)

@@ -27,5 +27,3 @@ const CardsList = ({ filteredProducts }) => {
 }
 
 export default CardsList
-
-

@@ -1,42 +1,21 @@
-import React from 'react';
-import {connect} from 'react-redux'
+import React from 'react'
 import './index.css';
-import { store } from './store/index'
-import AsideSection from './containers/AsideSection'
-import MainSection from './containers/MainSection'
+import FilterContainer from './containers/FilterContainer'
+import MainTitle from './components/MainTitle/MainTitle';
+import ListContainer from './containers/ListContainer';
 
+const App = () => {
+  return (
+    <div className="main">
+      <FilterContainer />
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+      <main className="main__section">
+        <MainTitle title="Список товаров" />
 
-    this.state = store.getState();
-
-    window.history.replaceState({ url: this.state.selectedCategories }, 'category', '?category=' + this.state.selectedCategories);
-  }
-
-  componentDidMount() {
-    window.addEventListener('popstate', this.setFromHistory);
-  }
-
-  setFromHistory = event => {
-    const url = event.state['url']
-    this.setState({ selectedCategories: url });
-  };
-
-  componentWillUnmount() {
-    window.removeEventListener('popstate', this.setFromHistory);
-  }
-
-  render() {
-    return (
-      <div className="main">
-        <AsideSection />
-
-        <MainSection />
-      </div>
-    );
-  }
+        <ListContainer />
+      </main>
+    </div>
+  );
 }
 
-export default connect()(App)
+export default App

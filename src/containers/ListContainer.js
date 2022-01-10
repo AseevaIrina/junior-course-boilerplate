@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import data from '../products.json';
-import Main from '../components/Main/Main';
+import CardsList from '../components/CardsList/CardsList';
 import memoize from '../utils/memoize';
 import { maxBy, minBy } from 'csssr-school-utils';
 
@@ -10,7 +10,6 @@ const filterProducts = memoize(( data, minPrice, maxPrice, discount, selectedCat
       return item.price >= minPrice && item.price <= maxPrice && item.discount >= discount && selectedCategories.includes(item.category)
     }
     else {
-      console.log(selectedCategories.length)
       return item.price >= minPrice && item.price <= maxPrice && item.discount >= discount
     }
   })
@@ -26,6 +25,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-const MainSection = connect(mapStateToProps)(Main)
+const ListContainer = connect(mapStateToProps)(CardsList)
 
-export default MainSection
+export default ListContainer

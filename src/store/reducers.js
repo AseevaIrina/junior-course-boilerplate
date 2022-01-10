@@ -1,6 +1,7 @@
-import { CHANGE_MIN_PRICE, CHANGE_MAX_PRICE, CHANGE_DISCOUNT, CHANGE_CATEGORIES, RESET_FILTERS } from './actions'
-import { maxBy, minBy } from 'csssr-school-utils';
-import data from '../products.json';
+import { CHANGE_MIN_PRICE, CHANGE_MAX_PRICE, CHANGE_DISCOUNT,
+  CHANGE_CATEGORIES, RESET_FILTERS, SET_FROM_HISTORY } from './actions'
+
+import { ToInitialState } from './index'
 
 export default function rootReducer(state, action) {
   switch (action.type) {
@@ -17,13 +18,10 @@ export default function rootReducer(state, action) {
       return {...state, selectedCategories: action.payload }
 
     case RESET_FILTERS:
-      return {...state,
-        minPrice: minBy(obj => obj.price, data).price,
-        maxPrice: maxBy(obj => obj.price, data).price,
-        discount: minBy(obj => obj.discount, data).discount,
-        filteredProducts: data,
-        selectedCategories: []
-      }
+      return {...ToInitialState,  selectedCategories: [] }
+
+    case SET_FROM_HISTORY:
+      return {...state, selectedCategories: action.payload }
 
     default:
       return state

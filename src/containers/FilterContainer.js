@@ -28,6 +28,6 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const AsideSection = connect(mapStateToProps, mapDispatchToProps)(Filter);
+const FilterContainer = connect(mapStateToProps, mapDispatchToProps)(Filter);
 
-export default AsideSection
+export default FilterContainer
