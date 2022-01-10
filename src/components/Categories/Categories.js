@@ -1,25 +1,28 @@
 import React from 'react';
 import './Categories.css';
-import { BaseContext } from '../BaseContext/BaseContext';
 import InputCategories from '../InputCategories/InputCategories'
 
-class Categories extends React.Component {
-  render() {
-    return (
-      <BaseContext.Consumer>
-        { ({ handleResetFilters }) => (
-          <div className="aside-block categories-block">
-            <h3 className="aside-block__title">Категории</h3>
-            <div className="aside-block__row">
-              <InputCategories value="Clothes" />
-              <InputCategories value="Books" />
-            </div>
-            <button className="categories-block__btn" onClick={handleResetFilters}>Сбросить фильтры</button>
-          </div>
-        )}
-      </BaseContext.Consumer>
-    )
+const Categories = props => {
+  const { selectedCategories } = props;
+
+  const handleChangeCategories = (event) => {
+    props.handleChangeCategories(event, selectedCategories)
   }
+  const handleResetFilters = () => {
+    props.handleResetFilters(selectedCategories)
+  }
+
+
+  return (
+    <>
+      <h3 className="Filter__title">Категории</h3>
+      <div className="Filter__row">
+        <InputCategories value="Clothes" onChange={handleChangeCategories} selectedCategories={selectedCategories} />
+        <InputCategories value="Books" onChange={handleChangeCategories} selectedCategories={selectedCategories} />
+      </div>
+      <button className="categories-block__btn" onClick={handleResetFilters}>Сбросить фильтры</button>
+    </>
+  )
 }
 
 export default Categories
