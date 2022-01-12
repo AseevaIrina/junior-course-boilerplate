@@ -1,22 +1,16 @@
 import React from 'react';
-import { BaseContext } from '../BaseContext/BaseContext';
 import './InputCategories.css'
 
-const InputCategories = ( {value} ) => {
+const InputCategories = ({ selectedCategories, value, onChange }) => {
   return (
-    <BaseContext.Consumer>
-      {
-        ({ categoryChangeState, selectedCategories }) => (
-          <label className="checkbox">
-            <input checked={selectedCategories.includes(value)}
-                   type="checkbox"
-                   value={value}
-                   onChange={categoryChangeState}
-                   className="checkbox__input" />
-            <span className="checkbox__text">{value}</span>
-          </label>
-        )}
-    </BaseContext.Consumer>
+    <label className="checkbox">
+      <input checked={selectedCategories.includes(value)}
+             type="checkbox"
+             value={value}
+             onChange={onChange}
+             className="checkbox__input" />
+      <span className="checkbox__text">{value}</span>
+    </label>
   )
 }
 
