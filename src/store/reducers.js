@@ -1,7 +1,7 @@
 import { CHANGE_MIN_PRICE, CHANGE_MAX_PRICE, CHANGE_DISCOUNT,
   CHANGE_CATEGORIES, RESET_FILTERS, SET_FROM_HISTORY } from './actions'
 
-import { ToInitialState } from './index'
+import { initialState } from './index'
 
 export default function rootReducer(state, action) {
   switch (action.type) {
@@ -18,7 +18,7 @@ export default function rootReducer(state, action) {
       return {...state, selectedCategories: action.payload }
 
     case RESET_FILTERS:
-      return {...ToInitialState,  selectedCategories: [] }
+      return {...initialState,  selectedCategories: [] }
 
     case SET_FROM_HISTORY:
       return {...state, selectedCategories: action.payload }

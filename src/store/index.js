@@ -11,14 +11,12 @@ const getSelectedCategoryFromUrl = (url) => {
   return parseUrl ? parseUrl.split(',') : []
 };
 
-const initialState = {
+export const initialState = {
   minPrice: minBy(obj => obj.price, data).price,
   maxPrice: maxBy(obj => obj.price, data).price,
   discount: minBy(obj => obj.discount, data).discount,
   filteredProducts: data,
   selectedCategories: getSelectedCategoryFromUrl(urlFilterParams)
 }
-
-export const ToInitialState = initialState
 
 export const store = createStore(rootReducer, initialState)
